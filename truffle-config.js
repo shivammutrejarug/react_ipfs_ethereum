@@ -1,6 +1,7 @@
 const path = require("path");
 
 module.exports = {
+  migrations_directory: "./client/src/contracts",
   networks: {
     development: {
       host: "127.0.0.1",

@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import User from "./contracts/User.json";
+// import ComposableUser from "./contracts/ComposableTopDown.json";
 import getWeb3 from "./getWeb3";
 import ipfs from "./ipfs";
 
@@ -32,6 +33,8 @@ class App extends Component {
       this.captureFile = this.captureFile.bind(this);
       this.onSubmit = this.onSubmit.bind(this);
       this.handleChange = this.handleChange.bind(this);
+      this.handleAddressChange = this.handleAddressChange.bind(this);
+      this.onTransferSubmit = this.onTransferSubmit.bind(this);
 
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
@@ -81,11 +84,17 @@ class App extends Component {
   handleChange() {
     console.log(this.refs.name.value);
     console.log(this.refs.age.valueAsNumber);
-    console.log(this.refs.age.type);
     this.setState({
       "name": this.refs.name.value,
       "age": this.refs.age.value,
       "sex": this.refs.sex.value
+    })
+  }
+
+  handleAddressChange() {
+    this.setState({
+      "form": this.refs.from.value,
+      "to": this.refs.to.value
     })
   }
 
@@ -101,12 +110,25 @@ class App extends Component {
 
       const {contract, name, age, sex, ipfsHash, accounts} = this.state;
       console.log(contract);
-      contract.methods.mint(name, age, sex, ipfsHash).send({from: accounts[0] }).then((r) => {
+      contract.methods.mint(name, age, sex, ipfsHash).send({from: accounts[0], gas: 3000000 }).then((r) => {
           return this.setState({ ipfsHash: result[0].hash })
         })
       console.log('ifpsHash', this.state.ipfsHash)
     })
   }
+
+  onTransferSubmit(event) {
+    event.preventDefault();
+
+    const {contract, to, accounts} = this.state;
+    console.log(accounts[0]);
+    console.log(to);
+    contract.methods.transferFrom(accounts[0], to, 2).send({from: accounts[0] }).then((r) => {
+      console.log('transfered to', contract.methods.balanceOf(to).call())
+    })
+  }
+
+
 
   render() {
     if (!this.state.web3) {
@@ -118,6 +140,20 @@ class App extends Component {
         <p>The image is stored on IPFS.</p>
         <img src={`https://ipfs.io/ipfs/${this.state.ipfsHash}`} alt="" />
         <h2>Upload Image</h2>
+
+        <Form onSubmit={this.onTransferSubmit}>
+          <Form.Group controlId="fromAddress">
+            <Form.Control type="text" placeholder="Address of account to transfer from" onChange={this.handleAddressChange} ref="from" />
+          </Form.Group>
+          <Form.Group controlId="toAddress">
+            <Form.Control type="text" placeholder="Address of account to transfer to" onChange={this.handleAddressChange} ref="to" />
+          </Form.Group>
+          <Button variant="primary" type="submit">
+            Submit
+          </Button>
+        </Form>
+
+
         <Form onSubmit={this.onSubmit}>
           <Form.Group controlId="userName">
             <Form.Control type="text" placeholder="Full Name" onChange={this.handleChange} ref="name" />

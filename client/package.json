@@ -9,6 +9,7 @@
     "chai-as-promised": "^7.1.1",
     "ipfs-api": "^26.1.2",
     "ipfs-http-client": "^44.1.0",
+    "openzeppelin-solidity": "^3.0.1",
     "react": "16.11.0",
     "react-bootstrap": "^1.0.1",
     "react-dom": "16.11.0",

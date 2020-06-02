@@ -8,6 +8,7 @@
 
 # production
 /build
+/client/src/contracts/*.json
 
 # misc
 .DS_Store

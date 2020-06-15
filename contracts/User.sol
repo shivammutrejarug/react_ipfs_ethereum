@@ -24,6 +24,7 @@ contract User is ERC721Full {
     string sex;
     string genome;
     address ownerAddress;
+    address sharedWith;
     Type tokenType;
   }
 
@@ -31,6 +32,8 @@ contract User is ERC721Full {
   RefUserData[] public refUsers;
   mapping (string => bool) _userExists;
   mapping (address => RefUserData) public usersNFT;
+  mapping (uint => address) public sharedWithMap;
+  /* SharedTokens[] public sharedWith */
 
   constructor() ERC721Full("User", "USER") public {
   }
@@ -48,6 +51,7 @@ contract User is ERC721Full {
         sex: _userSex,
         genome: _userGenome,
         ownerAddress: msg.sender,
+        sharedWith: msg.sender,
         tokenType: Type.Original
         });
 
@@ -57,7 +61,7 @@ contract User is ERC721Full {
       usersNFT[msg.sender] = newUser;
 
       /* Create reference token that will be transfered */
-      RefUserData memory refUser = RefUserData({
+      /* RefUserData memory refUser = RefUserData({
         originalTokenId: _id,
         name: _userName,
         age: _userAge,
@@ -65,11 +69,11 @@ contract User is ERC721Full {
         genome: _userGenome,
         ownerAddress: msg.sender,
         tokenType: Type.Shareable
-        });
+        }); */
 
-      uint _refId = refUsers.push(refUser);
+      /* uint _refId = refUsers.push(refUser); */
 
-      _mint(msg.sender, _refId); //Adding 1 to the index
+      /* _mint(msg.sender, _refId); //Adding 1 to the index */
 
   }
 
@@ -82,19 +86,30 @@ contract User is ERC721Full {
     from = from;
     to = to;
     tokenId = tokenId;
-    ERC721.transferFrom(from, to, tokenId);
+    uint256 index = tokenId - 1;
 
     /* Take care later. This might be required when we need to fetch
-    NFTs for a user from mapping
-    UserData memory newUser = UserData({
-      name: usersNFT[from].name,
-      age: usersNFT[from].age,
-      sex: usersNFT[from].sex,
-      genome: usersNFT[from].genome
+    NFTs for a user from mapping */
+    RefUserData memory newToken = RefUserData({
+      originalTokenId: tokenId,
+      name: refUsers[index].name,
+      age: refUsers[index].age,
+      sex: refUsers[index].sex,
+      genome: refUsers[index].genome,
+      ownerAddress: msg.sender,
+      sharedWith: to,
+      tokenType: Type.Shareable
       });
 
-    usersNFT[to] = newUser;
-    delete usersNFT[from]; */
+    uint _refId = refUsers.push(newToken);
+    _mint(msg.sender, _refId);
+
+    ERC721.transferFrom(from, to, _refId);
+    sharedWithMap[tokenId] = to;
+
+    /* usersNFT[to] = newToken; */
+    /* delete usersNFT[from]; */
+
   }
 
 }

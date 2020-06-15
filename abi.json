@@ -1,0 +1,55 @@
+{
+  "inputs": [
+    {
+      "name": "pkA",
+      "public": true,
+      "type": "array",
+      "components": {
+        "size": 2,
+        "type": "field"
+      }
+    },
+    {
+      "name": "pkB",
+      "public": true,
+      "type": "array",
+      "components": {
+        "size": 2,
+        "type": "field"
+      }
+    },
+    {
+      "name": "hash",
+      "public": true,
+      "type": "array",
+      "components": {
+        "size": 2,
+        "type": "field"
+      }
+    },
+    {
+      "name": "skA",
+      "public": false,
+      "type": "field"
+    },
+    {
+      "name": "secret",
+      "public": false,
+      "type": "array",
+      "components": {
+        "size": 4,
+        "type": "field"
+      }
+    },
+    {
+      "name": "skB",
+      "public": false,
+      "type": "field"
+    }
+  ],
+  "outputs": [
+    {
+      "type": "field"
+    }
+  ]
+}

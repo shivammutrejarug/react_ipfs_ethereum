@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import User from "./contracts/User.json";
+import { sha256 } from 'js-sha256';
 // import ComposableUser from "./contracts/ComposableTopDown.json";
 import getWeb3 from "./getWeb3";
 import ipfs from "./ipfs";
@@ -9,6 +10,8 @@ import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container";
 import "./App.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
+
+const secp256k1 = require('secp256k1');
 
 class App extends Component {
   state = { storageValue: 0, web3: null, accounts: null, contract: null,
@@ -58,6 +61,20 @@ class App extends Component {
     const totalUsers = await this.state.contract.methods.usersNFT(this.state.accounts[0]).call();
     this.setState({ipfsHash: totalUsers['genome']});
     console.log(this.state.ipfsHash);
+    console.log(sha256(new Uint8Array([0, 0, 0, this.state.ipfsHash])));
+    const privKey = '2c0b30092ddea4c6e9062fc1b3304c3dd598252eb34a0c7ef31af1cd3e077576';
+    const pubKey = secp256k1.publicKeyCreate(Buffer.from(privKey, 'hex'));
+    console.log(pubKey);
+    var Wallet = require('ethereumjs-wallet');
+    var EthUtil = require('ethereumjs-util');
+
+    // Get a wallet instance from a private key
+    // const privateKeyBuffer = EthUtil.toBuffer('0x61ce8b95ca5fd6f55cd97ac60817777bdf64f1670e903758ce53efc32c3dffeb');
+    const wallet = Wallet.fromPrivateKey(Buffer.from(privKey, 'hex'));
+
+    // Get a public key
+    const publicKey = wallet.getPublicKeyString();
+    console.log(publicKey);
   };
 
   // runExample = async () => {
@@ -123,7 +140,7 @@ class App extends Component {
     const {contract, to, accounts} = this.state;
     console.log(accounts[0]);
     console.log(to);
-    contract.methods.transferFrom(accounts[0], to, 2).send({from: accounts[0] }).then((r) => {
+    contract.methods.transferFrom(accounts[0], to, 1).send({from: accounts[0] }).then((r) => {
       console.log('transfered to', contract.methods.balanceOf(to).call())
     })
   }

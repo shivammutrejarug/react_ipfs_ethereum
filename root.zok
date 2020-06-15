@@ -1,0 +1,20 @@
+import "ecc/babyjubjubParams.code" as context
+import "ecc/proofOfOwnership.code" as proofOfOwnership
+import "hashes/sha256/512bitPacked.code" as sha256packed
+
+def proofOfKnowledge(private field[4] secret, field[2] hash) -> (field):
+    // check that the computed hash matches the input
+    hash == sha256packed(secret)
+    return 1
+
+def main(field[2] pkA, field[2] pkB, field[2] hash, private field skA, private field[4] secret, private field skB) -> (field):
+
+    context = context()
+    field AhasKnowledge = proofOfKnowledge(secret, hash)
+    field AhasOwnership = proofOfOwnership(pkA, skA, context)
+    field BhasOwnership = proofOfOwnership(pkB, skB, context)
+
+    field isAwithKnowledge = if AhasKnowledge == 1 && AhasOwnership == 1 then 1 else 0 fi
+    field out = if isAwithKnowledge == 1 || BhasOwnership == 1 then 1 else 0 fi
+
+    return out

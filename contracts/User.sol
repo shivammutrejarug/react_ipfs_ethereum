@@ -9,14 +9,7 @@ contract User is ERC721Full {
   enum Type { Original, Shareable }
   Type internal token_type;
 
-  /* struct UserData {
-    string name;
-    uint age;
-    string sex;
-    string genome; //this needs to be unique. Using a random id for now.
-    Type tokenType;
-  } */
-
+  /* Use this struct to store information to the blockchain */
   struct RefUserData {
     uint originalTokenId;
     string name;
@@ -39,6 +32,7 @@ contract User is ERC721Full {
   }
 
 
+  /* Just mint one token i.e. the original token */
   function mint(string memory _userName, uint _userAge, string
     memory _userSex, string memory _userGenome) public {
       require(!_userExists[_userGenome]);
@@ -75,17 +69,15 @@ contract User is ERC721Full {
 
       /* _mint(msg.sender, _refId); //Adding 1 to the index */
 
-  }
-
-  /* function newMint(string memory _userName, uint _userAge, string
-    memory _userSex, string memory _userGenome)  */
-
-  /* event checkMap(UserData); */
+    }
+  /* When user wants to share a token, a new token is minted and
+  transferred to the receiver.*/
 
   function transferFrom(address from, address to, uint256 tokenId) public {
     from = from;
     to = to;
     tokenId = tokenId;
+    /* This is done because the arrays start with 0 */
     uint256 index = tokenId - 1;
 
     /* Take care later. This might be required when we need to fetch
@@ -106,9 +98,6 @@ contract User is ERC721Full {
 
     ERC721.transferFrom(from, to, _refId);
     sharedWithMap[tokenId] = to;
-
-    /* usersNFT[to] = newToken; */
-    /* delete usersNFT[from]; */
 
   }
 

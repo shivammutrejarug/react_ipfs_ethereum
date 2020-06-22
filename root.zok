@@ -1,6 +1,6 @@
-import "ecc/babyjubjubParams.code" as context
-import "ecc/proofOfOwnership.code" as proofOfOwnership
-import "hashes/sha256/512bitPacked.code" as sha256packed
+import "ecc/babyjubjubParams.zok" as context
+import "ecc/proofOfOwnership.zok" as proofOfOwnership
+import "hashes/sha256/512bitPacked.zok" as sha256packed
 
 def proofOfKnowledge(private field[4] secret, field[2] hash) -> (field):
     // check that the computed hash matches the input

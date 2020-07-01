@@ -9,15 +9,14 @@
 	// Get private key from the user as arguments.
 	const privKeySender = myArgs[0];
 	const privKeyReceiver = myArgs[1];
+	const ipfsHash = myArgs[2];
+	const basedHashOne = myArgs[3];
+	const basedHashTwo = myArgs[4];
 
 
   const BN = require('bn.js');
-  // let newKey = new BN(pubKey, 16).toString(16);
-  // console.log(newKey);
   var Wallet = require('ethereumjs-wallet');
   var EthUtil = require('ethereumjs-util');
-
-  // console.log("read this", Wallet.getAddress());
 
   const crypto = require('crypto');
 
@@ -61,17 +60,15 @@
 
 
 	// Make ipfs hash zokrates compatible
-  let cmd = new BN(myArgs[2], 16).toString(10);
+  let cmd = new BN(ipfsHash, 16).toString(10);
   console.log(cmd.length);
   console.log("Secret part 1", cmd.slice(0,39));
   console.log("Secret part 2", cmd.slice(39,));
   console.log("Secret part 3", 0);
   console.log("Secret part 4", 0);
 
-
-  let ho = "7526918299517310424649411049846269940";
-  let h1 = "94480374055748278118937174248038871405";
-  let hexed = new BN(ho + h1, 16).toString(16);
+	// Convert base 10 to hexadecimal.
+  let hexed = new BN(basedHashOne + basedHashTwo, 16).toString(16);
   console.log("Hash 1", hexed.slice(0,37));
   console.log("Hash 2", hexed.slice(37,));
 

@@ -42,13 +42,6 @@ class App extends Component {
       // Set web3, accounts, and contract to the state, and then proceed with an
       // example of interacting with the contract's methods.
       this.setState({ web3, accounts, contract: instance });
-      // window.ethereum.on('accountsChanged', function (state) {
-      //   web3.eth.getAccounts(function (error, accounts) {
-      //     console.log(accounts[0], 'current account after account change');
-      //     this.setState({accounts})
-      //   });
-      // });
-      // console.log(this.state.accounts);
     } catch (error) {
       // Catch any errors for any of the above operations.
       alert(
@@ -57,7 +50,6 @@ class App extends Component {
       console.error(error);
     }
 
-    // const currentAccountIndex = this.state.accounts.index this.state.web3.eth.getCoinbase();
     const totalUsers = await this.state.contract.methods.usersNFT(this.state.accounts[0]).call();
     this.setState({ipfsHash: totalUsers['genome']});
     console.log(this.state.ipfsHash);
@@ -65,11 +57,9 @@ class App extends Component {
     const shaHash = sha256(new Uint8Array([0, 0, 0, this.state.ipfsHash]));
     const privKeySender = '2c0b30092ddea4c6e9062fc1b3304c3dd598252eb34a0c7ef31af1cd3e077576';
     const privKeyReceiver = 'e9290fb1addeb2336c750afaf1248e91d038d9c39b2e1373a9fd973357297d29';
-    // const pubKey = secp256k1.publicKeyCreate(Buffer.from(privKey, 'hex'));
-    // console.log(pubKey);
+
     const BN = require('bn.js');
-    // let newKey = new BN(pubKey, 16).toString(16);
-    // console.log(newKey);
+
     var Wallet = require('ethereumjs-wallet');
     var EthUtil = require('ethereumjs-util');
 
@@ -78,7 +68,6 @@ class App extends Component {
     const crypto = require('crypto');
 
     // Get a wallet instance from a private key
-    // const privateKeyBuffer = EthUtil.toBuffer('0x61ce8b95ca5fd6f55cd97ac60817777bdf64f1670e903758ce53efc32c3dffeb');
     const wallet = Wallet.fromPrivateKey(Buffer.from(privKeySender, 'hex'));
 
 
@@ -110,7 +99,7 @@ class App extends Component {
     console.log(privateReceiver.length);
 
 
-
+    // Convert IPFS hash to base 10
     let cmd = new BN(this.state.ipfsHash, 16).toString(10);
     console.log(cmd.length);
     console.log("Secret part 1", cmd.slice(0,39));
@@ -118,7 +107,7 @@ class App extends Component {
     console.log("Secret part 3", 0);
     console.log("Secret part 4", 0);
 
-
+    // Convert received base 10 string after encoding the IPFS hash to hexadecimal
     let ho = "7526918299517310424649411049846269940";
     let h1 = "94480374055748278118937174248038871405";
     let hexed = new BN(ho + h1, 16).toString(16);
@@ -126,16 +115,8 @@ class App extends Component {
     console.log("Hash 2", hexed.slice(37,));
   };
 
-  // runExample = async () => {
-  //   const { accounts, contract } = this.state;
-  //
-  //   await contract.methods.set(5).send({ from: accounts[0] });
-  //
-  //   const response = await contract.methods.get().call();
-  //
-  //   this.setState({ storageValue: response });
-  // };
 
+  // Fetch the file from browser and set it to the buffer state
   captureFile(event) {
     event.preventDefault();
     const file = event.target.files[0];
@@ -164,6 +145,7 @@ class App extends Component {
     })
   }
 
+  // Called when the user wants to create a NFT.
   onSubmit(event) {
     event.preventDefault();
     ipfs.files.add(this.state.buffer, (err, result) => {
@@ -183,6 +165,7 @@ class App extends Component {
     })
   }
 
+  // Called when User wants to transfer the NFT.
   onTransferSubmit(event) {
     event.preventDefault();
 

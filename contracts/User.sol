@@ -54,25 +54,11 @@ contract User is ERC721Full {
       _userExists[_userGenome] = true;
       usersNFT[msg.sender] = newUser;
 
-      /* Create reference token that will be transfered */
-      /* RefUserData memory refUser = RefUserData({
-        originalTokenId: _id,
-        name: _userName,
-        age: _userAge,
-        sex: _userSex,
-        genome: _userGenome,
-        ownerAddress: msg.sender,
-        tokenType: Type.Shareable
-        }); */
-
-      /* uint _refId = refUsers.push(refUser); */
-
-      /* _mint(msg.sender, _refId); //Adding 1 to the index */
 
     }
+
   /* When user wants to share a token, a new token is minted and
   transferred to the receiver.*/
-
   function transferFrom(address from, address to, uint256 tokenId) public {
     from = from;
     to = to;
@@ -80,8 +66,7 @@ contract User is ERC721Full {
     /* This is done because the arrays start with 0 */
     uint256 index = tokenId - 1;
 
-    /* Take care later. This might be required when we need to fetch
-    NFTs for a user from mapping */
+    /* Fetch NFT information for a user from mapping */
     RefUserData memory newToken = RefUserData({
       originalTokenId: tokenId,
       name: refUsers[index].name,

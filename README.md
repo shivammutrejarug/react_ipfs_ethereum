@@ -45,6 +45,7 @@ instance.contract.methods.ownerOf(2).call()
 16. Run `zokrates export-verifier`. This will provide us with the `verifier.sol` file which will be deployed on-chain later.
 17. Run `node getParams.js <your-private-key> <random-private-key> <your-ipfs-hash> <first-of-two-copied-strings> <second-of-two-copied-strings>`.
 18. You'll receive the command to run the witness. Run that command. Now uncomment lines commented in step 4. 
+19. Run `zokrates generate-proof`. This will give a file with name proof.json which will be used to fetch the arguments for `verifyTx` function in `verifier.sol`
 19. Copy the verifier.sol to contracts folder and copy verificationTest.js from tmp folder to test.
 20. Run `truffle migrate --network development`.
 21. Run `truffle test`. If all test cases pass, the verifier can be sure that the proof is genuine.

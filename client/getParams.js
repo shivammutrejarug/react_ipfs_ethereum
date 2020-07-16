@@ -69,12 +69,13 @@
 
 	// Convert base 10 to hexadecimal.
   let hexed = new BN(basedHashOne + basedHashTwo, 16).toString(16);
+	console.log(hexed.length);
   console.log("Hash 1", hexed.slice(0,37));
   console.log("Hash 2", hexed.slice(37,));
 
 
 	console.log("Final command to run for witness - \n zokrates compute-witness -a", paddedAddressSender.slice(0,77),
 	paddedAddressSender.slice(77,), paddedAddressReceiver.slice(0,77),
-	paddedAddressReceiver.slice(77,), hexed.slice(0,37), hexed.slice(37,),
+	paddedAddressReceiver.slice(77,), basedHashOne, basedHashTwo,
 	privateSender, cmd.slice(0,39), cmd.slice(39,), 0, 0, privateReceiver
 	);

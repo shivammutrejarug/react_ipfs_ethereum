@@ -37,6 +37,9 @@ instance.contract.methods.ownerOf(2).call()
 ```
 
 10. Now that we have transferred the file, we need to prove to the receiver that we own the NFT and that the owner has shared the NFT with him.
+
+Steps 11 through 18 can be achieved by running the file test_bash.sh
+
 11. Make sure you are in the `react_ipfs_ethereum` directory. Now move to get_hash directory `cd get_hash`. Run `zokrates compile -i create_hash.zok`. 
 12. Run `node getIpfsHashParams.js <your-ipfs-hash>`. This will give you the command you need to run to generate the witness with zokrates compatible arguments.
 13. Run the command from the previous step and copy the output.
@@ -45,6 +48,7 @@ instance.contract.methods.ownerOf(2).call()
 16. Run `zokrates export-verifier`. This will provide us with the `verifier.sol` file which will be deployed on-chain later.
 17. Run `node getParams.js <your-private-key> <random-private-key> <your-ipfs-hash> <first-of-two-copied-strings> <second-of-two-copied-strings>`.
 18. You'll receive the command to run the witness. Run that command. Now uncomment lines commented in step 4. 
+
 19. Run `zokrates generate-proof`. This will give a file with name proof.json which will be used to fetch the arguments for `verifyTx` function in `verifier.sol`
 19. Copy the verifier.sol to contracts folder and copy verificationTest.js from tmp folder to test.
 20. Run `truffle migrate --network development`.

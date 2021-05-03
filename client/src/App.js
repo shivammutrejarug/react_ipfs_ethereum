@@ -21,6 +21,7 @@ class App extends Component {
     try {
       // Get network provider and web3 instance.
       const web3 = await getWeb3();
+      console.log(web3);
 
       // Use web3 to get the user's accounts.
       const accounts = await web3.eth.getAccounts();
@@ -32,6 +33,7 @@ class App extends Component {
         User.abi,
         deployedNetwork && deployedNetwork.address,
       );
+      console.log(instance);
 
       this.captureFile = this.captureFile.bind(this);
       this.onSubmit = this.onSubmit.bind(this);
@@ -79,7 +81,7 @@ class App extends Component {
 
   handleAddressChange() {
     this.setState({
-      "form": this.refs.from.value,
+      "from": this.refs.from.value,
       "to": this.refs.to.value
     })
   }
@@ -97,6 +99,7 @@ class App extends Component {
 
       const {contract, name, age, sex, ipfsHash, accounts} = this.state;
       console.log(contract);
+      console.log(this.state.name);
       contract.methods.mint(name, age, sex, ipfsHash).send({from: accounts[0], gas: 3000000 }).then((r) => {
           return this.setState({ ipfsHash: result[0].hash })
         })
@@ -108,10 +111,11 @@ class App extends Component {
   onTransferSubmit(event) {
     event.preventDefault();
 
-    const {contract, to, accounts} = this.state;
+    const {contract, to, from, accounts} = this.state;
     console.log(accounts[0]);
+    console.log(from);
     console.log(to);
-    contract.methods.transferFrom(accounts[0], to, 1).send({from: accounts[0] }).then((r) => {
+    contract.methods.transferFrom(from, to, 1).send({from: from }).then((r) => {
       console.log('transfered to', contract.methods.balanceOf(to).call())
     })
   }

@@ -1,7 +1,7 @@
-var User = artifacts.require("./User.sol");
-var Verifier = artifacts.require("./verifier.sol");
+var Users = artifacts.require("./Users.sol");
+//var Verifier = artifacts.require("./verifier.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(User);
-  deployer.deploy(Verifier);
+  deployer.deploy(Users);
+  //deployer.deploy(Verifier);
 };

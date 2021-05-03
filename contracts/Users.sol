@@ -1,10 +1,10 @@
-pragma solidity ^0.5.0;
+pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721Full.sol";
 import "@openzeppelin/contracts/token/ERC721/ERC721Mintable.sol";
 
 
-contract User is ERC721Full {
+contract Users is ERC721Full {
 
   enum Type { Original, Shareable }
   Type internal token_type;

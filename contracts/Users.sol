@@ -1,10 +1,10 @@
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts/token/ERC721/ERC721Full.sol";
-import "@openzeppelin/contracts/token/ERC721/ERC721Mintable.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/presets/ERC721PresetMinterPauserAutoId.sol";
 
 
-contract Users is ERC721Full {
+contract Users is ERC721PresetMinterPauserAutoId {
 
   enum Type { Original, Shareable }
   Type internal token_type;
@@ -28,12 +28,12 @@ contract Users is ERC721Full {
   mapping (uint => address) public sharedWithMap;
   /* SharedTokens[] public sharedWith */
 
-  constructor() ERC721Full("User", "USER") public {
+  constructor() ERC721PresetMinterPauserAutoId("User", "USER", "http://localhost:3000/") {
   }
 
 
   /* Just mint one token i.e. the original token */
-  function mint(string memory _userName, uint _userAge, string
+  function mintNFT(string memory _userName, uint _userAge, string
     memory _userSex, string memory _userGenome) public {
       require(!_userExists[_userGenome]);
 
@@ -49,8 +49,9 @@ contract Users is ERC721Full {
         tokenType: Type.Original
         });
 
-      uint _id = refUsers.push(newUser);
-      _mint(msg.sender, _id);
+      refUsers.push(newUser);
+    //   _mint(msg.sender, _id);
+      mint(msg.sender);
       _userExists[_userGenome] = true;
       usersNFT[msg.sender] = newUser;
 
@@ -59,7 +60,7 @@ contract Users is ERC721Full {
 
   /* When user wants to share a token, a new token is minted and
   transferred to the receiver.*/
-  function transferFrom(address from, address to, uint256 tokenId) public {
+  function transferNFT(address from, address to, uint256 tokenId) public {
     from = from;
     to = to;
     tokenId = tokenId;
@@ -78,10 +79,10 @@ contract Users is ERC721Full {
       tokenType: Type.Shareable
       });
 
-    uint _refId = refUsers.push(newToken);
-    _mint(msg.sender, _refId);
+    refUsers.push(newToken);
+    mint(msg.sender);
 
-    ERC721.transferFrom(from, to, _refId);
+    ERC721.safeTransferFrom(from, to, tokenId);
     sharedWithMap[tokenId] = to;
     usersNFT[to] = newToken;
 

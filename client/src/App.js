@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import User from "./contracts/User.json";
+import Users from "./contracts/Users.json";
 import { sha256 } from 'js-sha256';
 // import ComposableUser from "./contracts/ComposableTopDown.json";
 import getWeb3 from "./getWeb3";
@@ -28,9 +29,9 @@ class App extends Component {
       console.log(accounts);
       // Get the contract instance.
       const networkId = await web3.eth.net.getId();
-      const deployedNetwork = User.networks[networkId];
+      const deployedNetwork = Users.networks[networkId];
       const instance = new web3.eth.Contract(
-        User.abi,
+        Users.abi,
         deployedNetwork && deployedNetwork.address,
       );
       console.log(instance);
@@ -100,7 +101,7 @@ class App extends Component {
       const {contract, name, age, sex, ipfsHash, accounts} = this.state;
       console.log(contract);
       console.log(this.state.name);
-      contract.methods.mint(name, age, sex, ipfsHash).send({from: accounts[0], gas: 3000000 }).then((r) => {
+      contract.methods.mintNFT(name, age, sex, ipfsHash).send({from: accounts[0], gas: 3000000 }).then((r) => {
           return this.setState({ ipfsHash: result[0].hash })
         })
       console.log('ifpsHash', this.state.ipfsHash)
@@ -115,7 +116,7 @@ class App extends Component {
     console.log(accounts[0]);
     console.log(from);
     console.log(to);
-    contract.methods.transferFrom(from, to, 1).send({from: from }).then((r) => {
+    contract.methods.transferNFT(from, to, 1).send({from: from }).then((r) => {
       console.log('transfered to', contract.methods.balanceOf(to).call())
     })
   }

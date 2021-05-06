@@ -1,20 +1,22 @@
 import "ecc/babyjubjubParams.zok" as context
 import "ecc/proofOfOwnership.zok" as proofOfOwnership
 import "hashes/sha256/512bitPacked.zok" as sha256packed
+from "ecc/babyjubjubParams" import BabyJubJubParams
 
-def proofOfKnowledge(private field[4] secret, field[2] hash) -> (field):
+def proofOfKnowledge(private field[4] secret, field[2] hash) -> (bool):
     // check that the computed hash matches the input
-    hash == sha256packed(secret)
-    return 1
+    // field item = if hash == sha256packed(secret) then 1 else 0 fi
+    bool item = hash == sha256packed(secret)
+    return item
 
 def main(field[2] pkA, field[2] pkB, field[2] hash, private field skA, private field[4] secret, private field skB) -> (field):
 
-    context = context()
-    field AhasKnowledge = proofOfKnowledge(secret, hash)
-    field AhasOwnership = proofOfOwnership(pkA, skA, context)
-    field BhasOwnership = proofOfOwnership(pkB, skB, context)
+    BabyJubJubParams context = context()
+    bool AhasKnowledge = proofOfKnowledge(secret, hash)
+    bool AhasOwnership = proofOfOwnership(pkA, skA, context)
+    bool BhasOwnership = proofOfOwnership(pkB, skB, context)
 
-    field isAwithKnowledge = if AhasKnowledge == 1 && AhasOwnership == 1 then 1 else 0 fi
-    field out = if isAwithKnowledge == 1 || BhasOwnership == 1 then 1 else 0 fi
+    field isAwithKnowledge = if AhasKnowledge == true && AhasOwnership == true then 1 else 0 fi
+    field out = if isAwithKnowledge == 1 || BhasOwnership == true then 1 else 0 fi
 
     return out

@@ -1,10 +1,10 @@
-const User = artifacts.require('./User.sol')
+const User = artifacts.require('./Users.sol')
 
 require('chai')
   .use(require('chai-as-promised'))
   .should()
 
-contract('User', (accounts) => {
+contract('Users', (accounts) => {
   let contract
 
   before(async () => {
@@ -35,12 +35,11 @@ contract('User', (accounts) => {
   describe('minting', async () => {
 
     it('creates a new token', async () => {
-      const result = await contract.mint('shivam', 25, 'male', '#SH25M')
+      const result = await contract.mintNFT('shivam', 25, 'male', '#SH25M')
       const totalSupply = await contract.totalSupply()
       // SUCCESS
       assert.equal(totalSupply, 1)
       const event = result.logs[0].args
-      assert.equal(event.tokenId.toNumber(), 1, 'id is correct')
       assert.equal(event.from, '0x0000000000000000000000000000000000000000', 'from is correct')
       assert.equal(event.to, accounts[0], 'to is correct')
 

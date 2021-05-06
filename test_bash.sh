@@ -7,7 +7,9 @@ zokrates compile -i create_hash.zok
 echo -n "Please enter your ipfs hash :"
 read IPFS
 echo "Your ipfs hash is $IPFS"
-OUTPUT=$(node getIpfsHashParams.js $IPFS)
+HASH=$(curl -X GET https://ipfs.infura.io:5001/api/v0/block/get\?arg\=$IPFS | shasum -a 256 | sed 's/-//')
+echo $HASH
+OUTPUT=$(node getIpfsHashParams.js $HASH)
 echo $OUTPUT
 $OUTPUT
 
@@ -26,6 +28,8 @@ zokrates export-verifier
 echo -n "Please enter your private key: "
 read PKEY
 
+sleep 3
+
 echo -n "Please enter random private key: "
 read RPKEY
 
@@ -40,4 +44,5 @@ cd "client"
 echo $(pwd)
 
 OUTPUT=$(node getParams.js $PKEY $RPKEY $IPFS $FSTRING $SSTRING)
+echo $OUTPUT
 $OUTPUT

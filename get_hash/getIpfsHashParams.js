@@ -7,6 +7,6 @@
   const BN = require('bn.js');
 
 	// Make ipfs hash zokrates compatible
-  let cmd = new BN(ipfsHash, 16).toString(10);
+  let cmd = new BN(ipfsHash, 16).toString();
 
-	console.log("zokrates compute-witness -a ", cmd.slice(0,39), cmd.slice(39,), 0, 0)
+	console.log("zokrates compute-witness -a ", cmd.slice(0,38), cmd.slice(39,), 0, 0)
